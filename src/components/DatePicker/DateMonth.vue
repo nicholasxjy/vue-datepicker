@@ -1,26 +1,26 @@
 <template lang="html">
   <div class="date-month">
-    <span>{{currentMonth - 1}}月</span>
+    <span>{{month - 1}}月</span>
     <div class="date-month-center">
-      <span class="year">{{currentYear}}年</span>
-      <span class="month">{{currentMonth}}月</span>
+      <span class="year">{{year}}年</span>
+      <span class="month">{{month}}月</span>
     </div>
-    <span>{{currentMonth + 1}}月</span>
+    <span>{{month + 1}}月</span>
   </div>
 </template>
 
 <script>
-import { getCurrentYear, getCurrentMonth } from './util'
+import { getYear, getMonth } from './util'
 
 export default {
   name: 'DateMonth',
   props: ['today'],
   computed: {
-    currentYear() {
-      return getCurrentYear(this.today)
+    year() {
+      return getYear(this.today)
     },
-    currentMonth() {
-      return getCurrentMonth(this.today)
+    month() {
+      return getMonth(this.today) + 1
     }
   }
 }
@@ -31,6 +31,12 @@ export default {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding: 15px;
+    padding: 15px 15px 25px;
+    font-size: 12px;
+    color: #666;
+  }
+  .date-month-center {
+    font-size: 14px;
+    color: #333;
   }
 </style>

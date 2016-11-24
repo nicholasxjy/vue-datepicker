@@ -8,17 +8,31 @@ export const WEEK_NAMES = [
   'SUN'
 ]
 
-export function getCurrentYear(date) {
+export function getYear(date) {
   date = new Date(date)
   return date.getFullYear()
 }
 
-export function getCurrentMonth(date) {
+export function getMonth(date) {
   date = new Date(date)
-  return date.getMonth() + 1
+  return date.getMonth()
 }
 
-export const getDayCountOfMonth = function(year, month) {
+export function getDate(date) {
+  date = new Date(date)
+  return date.getDate()
+}
+
+export function getDayOfWeek(date) {
+  date = new Date(date)
+  return date.getDay()
+}
+export function getWeekName(date) {
+  date = new Date(date)
+  return WEEK_NAMES[date.getDay()]
+}
+
+export function getDayCountOfMonth(year, month) {
   if (month === 3 || month === 5 || month === 8 || month === 10) {
     return 30;
   }
@@ -33,3 +47,9 @@ export const getDayCountOfMonth = function(year, month) {
 
   return 31;
 };
+
+export function getFirstDayOfMonth(date) {
+  date = new Date(date)
+  let temp = date.setDate(1)
+  return new Date(temp)
+}

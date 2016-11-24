@@ -6,7 +6,7 @@
       <span class="picker-header-action date-picker-min" @click="repickMinDate">2016-08-16</span>
       <span>至</span>
       <span class="picker-header-action date-picker-max" @click="repickMaxDate">2016-08-23</span>
-      <span class="picker-header-action date-picker-search">查询</span>
+      <span class="date-picker-search">查询</span>
     </div>
   </div>
 </template>
@@ -32,9 +32,9 @@ export default {
   .date-picker-header {
     position: relative;
     z-index: 1000;
-    padding-left: 20px;
-    padding-right: 20px;
-    border-bottom: 1px solid #efefef;
+    padding-left: 15px;
+    padding-right: 15px;
+    border-bottom: 1px solid #dcdcdc;
   }
   .picker-header-inner {
     display: flex;
@@ -42,10 +42,25 @@ export default {
     justify-content: space-between;
     margin-top: 20px;
     margin-bottom: 10px;
+    font-size: 12px;
+    color: #666;
   }
   .picker-header-action {
     display: block;
-    padding: 5px 8px;
+    width: 90px;
+    height: 25px;
+    border: 1px solid #0078EB;
+    border-radius: 3px;
+    line-height: 25px;
+    text-align: center;
+  }
+  .date-picker-search {
+    display: block;
+    width: 38px;
+    height: 25px;
+    line-height: 25px;
+    text-align: center;
+    color: #0078EB;
     border: 1px solid #0078EB;
     border-radius: 3px;
   }

@@ -2,7 +2,9 @@
   <div class="ws-date-picker">
     <date-header></date-header>
     <date-month :today="today"></date-month>
-    <date-table :select-mode="selectMode" :week-names="weekNames" :today="today"></date-table>
+    <div class="date-table-wrap">
+      <date-table :select-mode="selectMode" :week-names="weekNames" :today="today"></date-table>
+    </div>
   </div>
 </template>
 
@@ -41,8 +43,12 @@ export default {
 
 <style lang="scss">
   .ws-date-picker {
-    width: 440px;
+    width: 386px;
     margin: 0 auto;
     background-color: #fff;
+  }
+  .date-table-wrap {
+    padding-left: 15px;
+    padding-right: 15px;
   }
 </style>
