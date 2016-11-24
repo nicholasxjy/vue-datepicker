@@ -37,6 +37,15 @@ export default {
     return {
       today: new Date()
     }
+  },
+  created() {
+    this.$on('preMonth', (currentMonth)=> {
+      console.log(currentMonth)
+    })
+
+    this.$on('nextMonth', (currentMonth)=> {
+      console.log(currentMonth)
+    })
   }
 }
 </script>
@@ -50,5 +59,6 @@ export default {
   .date-table-wrap {
     padding-left: 15px;
     padding-right: 15px;
+    padding-bottom: 11px;
   }
 </style>

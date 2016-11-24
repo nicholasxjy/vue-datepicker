@@ -1,11 +1,11 @@
 <template lang="html">
   <div class="date-month">
-    <span>{{month - 1}}月</span>
+    <span @click="preMonth">{{month - 1}}月</span>
     <div class="date-month-center">
       <span class="year">{{year}}年</span>
       <span class="month">{{month}}月</span>
     </div>
-    <span>{{month + 1}}月</span>
+    <span @click="nextMonth">{{month + 1}}月</span>
   </div>
 </template>
 
@@ -21,6 +21,14 @@ export default {
     },
     month() {
       return getMonth(this.today) + 1
+    }
+  },
+  methods: {
+    preMonth() {
+      this.$parent.$emit('preMonth', this.month)
+    },
+    nextMonth() {
+      this.$parent.$emit('nextMonth', this.month)
     }
   }
 }
