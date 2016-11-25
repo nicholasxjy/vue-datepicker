@@ -1,51 +1,98 @@
 <template lang="html">
-  <div class="ws-date-picker">
-    <date-header></date-header>
-    <date-month :today="today"></date-month>
-    <div class="date-table-wrap">
-      <date-table :select-mode="selectMode" :week-names="weekNames" :today="today"></date-table>
+  <div>
+    <div class="ws-date-picker" :class="{'show': isShow}">
+      <date-header :min-date="minDate" :max-date="maxDate"></date-header>
+      <div class="ws-date-picker__table-wrapper">
+        <date-table ref="pickertable" :year="year" :month="month"></date-table>
+      </div>
     </div>
   </div>
 </template>
 
 <script>
-import DateTable from './DateTable.vue'
-import DateHeader from './DateHeader.vue'
-import DateMonth from './DateMonth.vue'
-import { WEEK_NAMES } from './util'
+import DateTable from './src/DateTable.vue'
+import DateHeader from './src/Header.vue'
+import { getYear, getMonth, addWeeks } from './util'
 
 export default {
   name: 'DatePicker',
-  props: {
-    selectMode: {
-      type: String,
-      default: 'whatever' // enum [day week month whatever]
-    },
-    weekNames: {
-      type: Array,
-      default: () => {
-        return WEEK_NAMES
-      }
-    }
-  },
+  props: ['options'],
   components: {
     DateTable,
-    DateHeader,
-    DateMonth
+    DateHeader
   },
   data() {
     return {
-      today: new Date()
+      year: null,
+      month: null,
+      minDate: null,
+      maxDate: null,
+      isShow: false
+    }
+  },
+  methods: {
+    initPicker() {
+      const today = new Date()
+      if (!this.year) {
+        this.year = getYear(today)
+      }
+      if (!this.month) {
+        this.month = getMonth(today)
+      }
+      if (!this.minDate) {
+        this.minDate = today
+      }
+      if (!this.maxDate) {
+        this.maxDate =addWeeks(today, 1)
+      }
+    },
+    resetPciker() {
+      this.year = null
+      this.month = null
+      this.minDate = null
+      this.maxDate = null
+      this.initPicker()
+      this.$refs.pickertable.$emit('resetPciker')
+    },
+    show() {
+      this.isShow = true
+    },
+    hide() {
+      this.isShow = false
     }
   },
   created() {
-    this.$on('preMonth', (currentMonth)=> {
-      console.log(currentMonth)
-    })
+    this.initPicker()
+    this.$on('preMonth', () => {
+      this.month--
+      if (this.month < 0) {
+        this.month = 11
+        this.year--
+      }
+    });
 
-    this.$on('nextMonth', (currentMonth)=> {
-      console.log(currentMonth)
-    })
+    this.$on('nextMonth', () => {
+      this.month++
+      if (this.month > 11) {
+        this.month = 0
+        this.year++
+      }
+    });
+
+    this.$on('startSelect', (data) => {
+      //here set minDate
+      this.minDate = new Date(data.year, data.month, data.date)
+    });
+
+    this.$on('endSelect', (data) => {
+      this.maxDate = new Date(data.year, data.month, data.date)
+      this.options.getDate([this.minDate, this.maxDate])
+    });
+
+    this.$on('closePicker', () => {
+      this.hide()
+      this.resetPciker()
+    });
   }
 }
 </script>
@@ -55,8 +102,12 @@ export default {
     width: 386px;
     margin: 0 auto;
     background-color: #fff;
+    display: none;
+    &.show {
+      display: block;
+    }
   }
-  .date-table-wrap {
+  .ws-date-picker__table-wrapper {
     padding-left: 15px;
     padding-right: 15px;
     padding-bottom: 11px;

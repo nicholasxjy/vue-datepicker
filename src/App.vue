@@ -1,8 +1,8 @@
 <template>
   <div id="app">
     <div class="content">
-      <a @click="showDatepicker" date-picker="dp">show datepicker</a>
-      <date-picker ref="dp"></date-picker>
+      <a @click="showDatepicker">show datepicker</a>
+      <date-picker ref="datepicker" :options="opts"></date-picker>
     </div>
   </div>
 </template>
@@ -17,15 +17,16 @@ export default {
   },
   data() {
     return {
-
+      opts: {
+        getDate: (data)=> {
+          console.log(data)
+        }
+      }
     }
   },
   methods: {
     showDatepicker() {
-
-    },
-    pickDate(date) {
-
+      this.$refs.datepicker.show()
     }
   }
 }
