@@ -170,7 +170,7 @@ export default {
         }
       }
       //first calculate weeks count
-      //divided 5 groups every 7
+      //divided groups every 7 according to count above
       let weekCount = Math.ceil((firstDayOfWeek + dayCountMonth) / 7)
       for(let j = 0; j < weekCount; j++) {
         let groups = []

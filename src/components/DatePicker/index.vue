@@ -1,6 +1,6 @@
 <template lang="html">
-  <div>
-    <div class="ws-date-picker" :class="{'show': isShow}">
+  <div v-if="isShow">
+    <div class="ws-date-picker" >
       <date-header :min-date="minDate" :max-date="maxDate"></date-header>
       <div class="ws-date-picker__table-wrapper">
         <date-table ref="pickertable" :year="year" :month="month"></date-table>
@@ -43,7 +43,7 @@ export default {
         this.minDate = today
       }
       if (!this.maxDate) {
-        this.maxDate =addWeeks(today, 1)
+        this.maxDate = addWeeks(today, 1)
       }
     },
     resetPciker() {
@@ -59,6 +59,9 @@ export default {
     },
     hide() {
       this.isShow = false
+    },
+    getPickDate() {
+      return [this.minDate, this.maxDate]
     }
   },
   created() {
@@ -93,6 +96,16 @@ export default {
       this.hide()
       this.resetPciker()
     });
+
+    this.$on('repickMinDate', () => {
+      this.year = getYear(this.minDate)
+      this.month = getMonth(this.minDate)
+    })
+
+    this.$on('repickMaxDate', () => {
+      this.year = getYear(this.maxDate)
+      this.month = getMonth(this.maxDate)
+    })
   }
 }
 </script>
@@ -102,10 +115,6 @@ export default {
     width: 386px;
     margin: 0 auto;
     background-color: #fff;
-    display: none;
-    &.show {
-      display: block;
-    }
   }
   .ws-date-picker__table-wrapper {
     padding-left: 15px;

@@ -2,12 +2,15 @@
   <div class="ws-date-picker__header">
     <a class="ws-date-picker__close" @click="closePicker">Close</a>
     <div class="ws-date-picker__header-body">
-      <span>选择日期：</span>
-      <span class="ws-date-picker__header-action header-action-min" @click="repickMinDate">{{leftDate}}</span>
-      <span>至</span>
-      <span class="ws-date-picker__header-action header-action-max" @click="repickMaxDate">{{rightDate}}</span>
-      <span class="ws-date-picker__search" @click="pickSearch">查询</span>
+      <div class="ws-date-picker__header-body-inner">
+        <span>选择日期：</span>
+        <span class="ws-date-picker__header-action header-action-min" :class="{'active': isMinPicking}" @click="repickMinDate">{{leftDate}}</span>
+        <span>至</span>
+        <span class="ws-date-picker__header-action header-action-max" :class="{'active': !isMinPicking}" @click="repickMaxDate">{{rightDate}}</span>
+        <span class="ws-date-picker__search" @click="pickSearch">查询</span>
+      </div>
     </div>
+    <div class="ws-date-picker__indicator" :class="{'max': !isMinPicking}"></div>
   </div>
 </template>
 
@@ -16,15 +19,22 @@ import { formatDate } from '../util'
 export default {
   name: 'DateHeader',
   props: ['minDate', 'maxDate'],
+  data() {
+    return {
+      isMinPicking: true
+    }
+  },
   methods: {
     closePicker() {
       this.$parent.$emit('closePicker')
     },
     repickMinDate() {
-
+      this.isMinPicking = true
+      this.$parent.$emit('repickMinDate')
     },
     repickMaxDate() {
-
+      this.isMinPicking = false
+      this.$parent.$emit('repickMaxDate')
     },
     pickSearch() {
 
@@ -50,7 +60,7 @@ export default {
     padding-right: 15px;
     border-bottom: 1px solid #dcdcdc;
   }
-  .ws-date-picker__header-body {
+  .ws-date-picker__header-body-inner {
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -93,5 +103,42 @@ export default {
     color: #666;
     font-size: 12px;
     cursor: pointer;
+  }
+  .ws-date-picker__indicator {
+    position: absolute;
+    width: 38px;
+    left: 119px;
+    bottom: 0;
+    height: 6px;
+    overflow: hidden;
+    transition: 300ms;
+    transition-timing-function: ease-out;
+    transition-property: left;
+    &:before {
+      content: "";
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 38px;
+      height: 1px;
+      box-sizing: border-box;
+      border-bottom: 1px solid #0078EB;
+    }
+    &:after {
+      content: "";
+      position: absolute;
+      top: 100%;
+      left: 56%;
+      width: 5px;
+      height: 5px;
+      border: 1px solid #0078EB;
+      background: #fff;
+      -webkit-transform: rotate(45deg) translate(-7px,2px);
+      transform: rotate(45deg) translate(-7px,2px);
+      z-index: 10;
+    }
+    &.max {
+      left: 253px;
+    }
   }
 </style>
