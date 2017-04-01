@@ -9,3 +9,9 @@
 
 ![shot3](./src/assets/shot3.png)
 
+
+### how to run demo
+
+1. `$ git clone`
+2. `$ npm install`
+3. `$ npm run dev`
