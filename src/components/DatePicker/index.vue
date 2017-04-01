@@ -1,124 +1,94 @@
-<template lang="html">
-  <div v-if="isShow">
-    <div class="ws-date-picker" >
-      <date-header :min-date="minDate" :max-date="maxDate"></date-header>
-      <div class="ws-date-picker__table-wrapper">
-        <date-table ref="pickertable" :year="year" :month="month"></date-table>
-      </div>
+<template>
+  <div class="datepicker">
+    <div class="datepicker-main-panel">
+      <date-header :year="year" :month="month" :change-year="changeYear" :change-month="changeMonth" :show-year="showYearTable" :show-month="showMonthTable"></date-header>
+      <date-table :year="year" :month="month" :day="day" :select-day="selectDay"></date-table>
+    </div>
+    <div class="datepicker-year-panel" v-if="isShowYear">
+      <year-table :year="year" :select-year="selectYear"></year-table>
+    </div>
+    <div class="datepicker-month-panel" v-if="isShowMonth">
+      <month-table :select-month="selectMonth"></month-table>
     </div>
   </div>
 </template>
 
 <script>
-import DateTable from './src/DateTable.vue'
-import DateHeader from './src/Header.vue'
-import { getYear, getMonth, addWeeks } from './util'
+  import DateHeader from './DateHeader.vue'
+  import DateTable from './DateTable.vue'
+  import YearTable from './YearTable.vue'
+  import MonthTable from './MonthTable.vue'
 
-export default {
-  name: 'DatePicker',
-  props: ['options'],
-  components: {
-    DateTable,
-    DateHeader
-  },
-  data() {
-    return {
-      year: null,
-      month: null,
-      minDate: null,
-      maxDate: null,
-      isShow: false
+  export default {
+    name: 'DatePicker',
+    components: {
+      DateHeader,
+      DateTable,
+      YearTable,
+      MonthTable
+    },
+    data() {
+      return {
+        year: new Date().getFullYear(),
+        month: new Date().getMonth(),
+        day: new Date().getDate(),
+        isShowYear: false,
+        isShowMonth: false
+      }
+    },
+    methods: {
+      changeYear(year) {
+        this.year = year
+      },
+      changeMonth(month) {
+        this.month = month
+      },
+      showYearTable() {
+        this.isShowYear = true
+      },
+      showMonthTable() {
+        this.isShowMonth = true
+      },
+      selectYear(year) {
+        this.isShowYear = false
+        this.year = year
+      },
+      selectMonth(month) {
+        this.isShowMonth = false
+        this.month = month
+      },
+      selectDay(day) {
+        this.day = day
+        const date = new Date(this.year, this.month, this.day)
+        this.$emit('input', date)
+      }
     }
-  },
-  methods: {
-    initPicker() {
-      const today = new Date()
-      if (!this.year) {
-        this.year = getYear(today)
-      }
-      if (!this.month) {
-        this.month = getMonth(today)
-      }
-      if (!this.minDate) {
-        this.minDate = today
-      }
-      if (!this.maxDate) {
-        this.maxDate = addWeeks(today, 1)
-      }
-    },
-    resetPciker() {
-      this.year = null
-      this.month = null
-      this.minDate = null
-      this.maxDate = null
-      this.initPicker()
-      this.$refs.pickertable.$emit('resetPciker')
-    },
-    show() {
-      this.isShow = true
-    },
-    hide() {
-      this.isShow = false
-    },
-    getPickDate() {
-      return [this.minDate, this.maxDate]
-    }
-  },
-  created() {
-    this.initPicker()
-    this.$on('preMonth', () => {
-      this.month--
-      if (this.month < 0) {
-        this.month = 11
-        this.year--
-      }
-    });
-
-    this.$on('nextMonth', () => {
-      this.month++
-      if (this.month > 11) {
-        this.month = 0
-        this.year++
-      }
-    });
-
-    this.$on('startSelect', (data) => {
-      //here set minDate
-      this.minDate = new Date(data.year, data.month, data.date)
-    });
-
-    this.$on('endSelect', (data) => {
-      this.maxDate = new Date(data.year, data.month, data.date)
-      this.options.getDate([this.minDate, this.maxDate])
-    });
-
-    this.$on('closePicker', () => {
-      this.hide()
-      this.resetPciker()
-    });
-
-    this.$on('repickMinDate', () => {
-      this.year = getYear(this.minDate)
-      this.month = getMonth(this.minDate)
-    })
-
-    this.$on('repickMaxDate', () => {
-      this.year = getYear(this.maxDate)
-      this.month = getMonth(this.maxDate)
-    })
   }
-}
 </script>
 
-<style lang="scss">
-  .ws-date-picker {
-    width: 386px;
-    margin: 0 auto;
-    background-color: #fff;
-  }
-  .ws-date-picker__table-wrapper {
-    padding-left: 15px;
-    padding-right: 15px;
-    padding-bottom: 11px;
-  }
+<style lang="css" scoped>
+.datepicker {
+  position: relative;
+  z-index: 1000;
+  width: 380px;
+  background-color: #fff;
+}
+.datepicker-main-panel {
+  padding: 15px;
+  border: 1px solid #dcdcdc;
+  border-radius: 5px;
+}
+.datepicker-year-panel, .datepicker-month-panel {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 1200;
+  background-color: #fff;
+}
+.datepicker-month-panel {
+  display: flex;
+  align-items: center;
+}
 </style>

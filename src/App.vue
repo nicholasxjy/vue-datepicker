@@ -1,45 +1,52 @@
 <template>
   <div id="app">
     <div class="content">
-      <a @click="showDatepicker">show datepicker</a>
-      <date-picker ref="datepicker" :options="opts"></date-picker>
+      <a class="trigger" @click="showDatePicker">Select Date</a>
+      <div class="date-picker-container" v-if="isShow">
+        <date-picker v-model="selectDate"></date-picker>
+      </div>
     </div>
   </div>
 </template>
 
 <script>
-import DatePicker from './components/DatePicker'
-
+import DatePicker from './components/DatePicker/Index.vue'
 export default {
   name: 'app',
   components: {
     DatePicker
   },
+  watch: {
+    selectDate(val) {
+      alert(val)
+    }
+  },
   data() {
     return {
-      opts: {
-        getDate: (data)=> {
-          console.log(data)
-        }
-      }
+      selectDate: null,
+      isShow: false
     }
   },
   methods: {
-    showDatepicker() {
-      this.$refs.datepicker.show()
+    showDatePicker() {
+      this.isShow = true
     }
   }
 }
 </script>
-
+<style src="normalize.css"></style>
 <style>
-#app {
-  font-family: 'Avenir', Helvetica, Arial, sans-serif;
+html, body {
+  margin: 0;
+  padding: 0;
+}
+body {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", Arial, sans-serif, "Microsoft YaHei";
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 1.4;
 }
 .content {
   width: 800px;
@@ -50,6 +57,21 @@ export default {
   background-color: #fafafa;
 }
 a {
-  padding: 5px 15px;
+  cursor: pointer;
+}
+.trigger {
+  display: block;
+  width: 150px;
+  height: 44px;
+  background-color: #fff;
+  border: 1px solid #e6e6e6;
+  border-radius: 4px;
+  text-align: center;
+  line-height: 44px;
+}
+.date-picker-container {
+  display: flex;
+  justify-content: center;
+  margin-top: 50px;
 }
 </style>

@@ -1,18 +1,11 @@
-# datepicker
+# A datepicker plugin for vue2
 
-> A Vue.js project
 
-## Build Setup
+### screen shot
 
-``` bash
-# install dependencies
-npm install
+![shot1](./src/assets/shot1.png)
 
-# serve with hot reload at localhost:8080
-npm run dev
+![shot2](./src/assets/shot2.png)
 
-# build for production with minification
-npm run build
-```
+![shot3](./src/assets/shot3.png)
 
-For detailed explanation on how things work, checkout the [guide](http://vuejs-templates.github.io/webpack/) and [docs for vue-loader](http://vuejs.github.io/vue-loader).
